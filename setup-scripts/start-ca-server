@@ -1,0 +1,8 @@
+#!/bin/bash
+
+export GOPATH=/home/prehoda/go
+export GOBIN=$GOPATH/bin
+export PATH=$PATH:$GOBIN
+
+cd $HOME/mycode/onlab/pbnetwork/ca/server/
+fabric-ca-server start -b admin:adminpw -c $HOME/mycode/onlab/pbnetwork/ca/server/fabric-ca-server-config.yaml

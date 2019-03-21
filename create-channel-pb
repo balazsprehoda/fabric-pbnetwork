@@ -1,0 +1,43 @@
+export CHANNEL_NAME=mychannel
+export PATH=$PATH:/home/prehoda/mycode/fabric/own-network/fabric-samples/bin:$GOROOT/bin
+peer channel create -o orderer.pbnetwork.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx --tls --cafile $GOPATH/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/pbnetwork.com/orderers/orderer.pbnetwork.com/msp/tlscacerts/tlsca.pbnetwork.com-cert.pem
+
+peer channel join -b mychannel.block
+
+CORE_PEER_MSPCONFIGPATH=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.pbnetwork.com/users/Admin@org2.pbnetwork.com/msp CORE_PEER_ADDRESS=peer0.org2.pbnetwork.com:7051 CORE_PEER_LOCALMSPID="Org2MSP" CORE_PEER_TLS_ROOTCERT_FILE=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.pbnetwork.com/peers/peer0.org2.pbnetwork.com/tls/ca.crt peer channel join -b mychannel.block
+
+CORE_PEER_MSPCONFIGPATH=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org3.pbnetwork.com/users/Admin@org3.pbnetwork.com/msp CORE_PEER_ADDRESS=peer0.org3.pbnetwork.com:7051 CORE_PEER_LOCALMSPID="Org3MSP" CORE_PEER_TLS_ROOTCERT_FILE=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org3.pbnetwork.com/peers/peer0.org3.pbnetwork.com/tls/ca.crt peer channel join -b mychannel.block
+
+CORE_PEER_MSPCONFIGPATH=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.pbnetwork.com/users/Admin@org1.pbnetwork.com/msp CORE_PEER_ADDRESS=peer0.org1.pbnetwork.com:7051 CORE_PEER_LOCALMSPID="Org1MSP" CORE_PEER_TLS_ROOTCERT_FILE=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.pbnetwork.com/peers/peer0.org1.pbnetwork.com/tls/ca.crt
+
+peer channel update -o orderer.pbnetwork.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/Org1MSPanchors.tx --tls --cafile $GOPATH/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/pbnetwork.com/orderers/orderer.pbnetwork.com/msp/tlscacerts/tlsca.pbnetwork.com-cert.pem
+
+CORE_PEER_MSPCONFIGPATH=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.pbnetwork.com/users/Admin@org2.pbnetwork.com/msp CORE_PEER_ADDRESS=peer0.org2.pbnetwork.com:7051 CORE_PEER_LOCALMSPID="Org2MSP" CORE_PEER_TLS_ROOTCERT_FILE=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.pbnetwork.com/peers/peer0.org2.pbnetwork.com/tls/ca.crt peer channel update -o orderer.pbnetwork.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/Org2MSPanchors.tx --tls --cafile $GOPATH/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/pbnetwork.com/orderers/orderer.pbnetwork.com/msp/tlscacerts/tlsca.pbnetwork.com-cert.pem
+
+CORE_PEER_MSPCONFIGPATH=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org3.pbnetwork.com/users/Admin@org3.pbnetwork.com/msp CORE_PEER_ADDRESS=peer0.org3.pbnetwork.com:7051 CORE_PEER_LOCALMSPID="Org3MSP" CORE_PEER_TLS_ROOTCERT_FILE=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org3.pbnetwork.com/peers/peer0.org3.pbnetwork.com/tls/ca.crt peer channel update -o orderer.pbnetwork.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/Org3MSPanchors.tx --tls --cafile $GOPATH/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/pbnetwork.com/orderers/orderer.pbnetwork.com/msp/tlscacerts/tlsca.pbnetwork.com-cert.pem
+
+# Install chaincode to all peers
+
+CORE_PEER_MSPCONFIGPATH=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.pbnetwork.com/users/Admin@org1.pbnetwork.com/msp CORE_PEER_ADDRESS=peer0.org1.pbnetwork.com:7051 CORE_PEER_LOCALMSPID="Org1MSP" CORE_PEER_TLS_ROOTCERT_FILE=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.pbnetwork.com/peers/peer0.org1.pbnetwork.com/tls/ca.crt 
+
+peer chaincode install -n privatedata -v 1.0 -p github.com/chaincode/privatedata
+
+CORE_PEER_MSPCONFIGPATH=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.pbnetwork.com/users/Admin@org2.pbnetwork.com/msp CORE_PEER_ADDRESS=peer0.org2.pbnetwork.com:7051 CORE_PEER_LOCALMSPID="Org2MSP" CORE_PEER_TLS_ROOTCERT_FILE=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.pbnetwork.com/peers/peer0.org2.pbnetwork.com/tls/ca.crt 
+
+peer chaincode install -n privatedata -v 1.0 -p github.com/chaincode/privatedata
+
+CORE_PEER_MSPCONFIGPATH=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org3.pbnetwork.com/users/Admin@org3.pbnetwork.com/msp CORE_PEER_ADDRESS=peer0.org3.pbnetwork.com:7051 CORE_PEER_LOCALMSPID="Org3MSP" CORE_PEER_TLS_ROOTCERT_FILE=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org3.pbnetwork.com/peers/peer0.org3.pbnetwork.com/tls/ca.crt 
+
+peer chaincode install -n privatedata -v 1.0 -p github.com/chaincode/privatedata
+
+# Instantiate chaincode
+
+peer chaincode instantiate -o orderer.pbnetwork.com:7050 --tls --cafile $GOPATH/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/pbnetwork.com/orderers/orderer.pbnetwork.com/msp/tlscacerts/tlsca.pbnetwork.com-cert.pem -C $CHANNEL_NAME -n privatedata -v 1.0 -c '{"Args":["init"]}' -P "OR ('Org1MSP.member','Org2MSP.member','Org3MSP.member')" --collections-config $GOPATH/src/github.com/chaincode/privatedata/collections_config.json
+
+# Invoke
+
+peer chaincode invoke -o orderer.pbnetwork.com:7050  --tls --cafile $GOPATH/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/pbnetwork.com/orderers/orderer.pbnetwork.com/msp/tlscacerts/tlsca.pbnetwork.com-cert.pem  -C $CHANNEL_NAME -n privatedata -c '{"Args":["createPen","PEN0","PAX", "Blue", "15 cm", "95 mm", "0.5 mm", "10", "50"]}'
+
+peer chaincode invoke -o orderer.pbnetwork.com:7050  --tls --cafile $GOPATH/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/pbnetwork.com/orderers/orderer.pbnetwork.com/msp/tlscacerts/tlsca.pbnetwork.com-cert.pem  -C $CHANNEL_NAME -n privatedata -c '{"Args":["getPen","PEN0"]}'
+
+peer chaincode invoke -o orderer.pbnetwork.com:7050  --tls --cafile $GOPATH/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/pbnetwork.com/orderers/orderer.pbnetwork.com/msp/tlscacerts/tlsca.pbnetwork.com-cert.pem  -C $CHANNEL_NAME -n privatedata -c '{"Args":["getPenPrice","PEN0"]}'

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+export GOPATH=/home/prehoda/go
+export GOBIN=$GOPATH/bin
+export PATH=$PATH:$GOBIN
+
+docker rm -f $(docker ps -aq)
+
+cd $HOME/mycode/onlab/pbnetwork/base/
+sudo rm -r ./orderer.pbnetwork.com ./peer0.org1.pbnetwork.com ./peer0.org2.pbnetwork.com ./peer0.org3.pbnetwork.com
+cd $HOME/mycode/onlab/pbnetwork/ca/clients/
+sudo rm -r ./admin ./peer1 ./peer2 ./peer3 ./orderer
+cd $HOME/mycode/onlab/pbnetwork/ca/server/
+sudo rm -r ./msp ./ca-cert.pem ./IssuerPublicKey ./IssuerRevocationPublicKey ./fabric-ca-server.db
+cd $HOME/mycode/onlab/pbnetwork/
+sudo rm -r ./channel-artifacts
+sudo rm -r ./crypto-config/peerOrganizations/ ./crypto-config/ordererOrganizations/

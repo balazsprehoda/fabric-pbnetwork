@@ -1,0 +1,74 @@
+version: '2'
+
+networks:
+  onlab:
+
+services:
+  orderer.pbnetwork.com:
+    extends:
+      file:   base/docker-compose-base.yaml
+      service: orderer.pbnetwork.com
+    container_name: orderer.pbnetwork.com
+    networks:
+      - onlab
+
+  peer0.org1.pbnetwork.com:
+    container_name: peer0.org1.pbnetwork.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.org1.pbnetwork.com
+    networks:
+      - onlab
+
+  peer0.org2.pbnetwork.com:
+    container_name: peer0.org2.pbnetwork.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.org2.pbnetwork.com
+    networks:
+      - onlab
+
+  peer0.org3.pbnetwork.com:
+    container_name: peer0.org3.pbnetwork.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.org3.pbnetwork.com
+    networks:
+      - onlab
+
+  cli:
+    container_name: cli
+    image: hyperledger/fabric-tools
+    tty: true
+    stdin_open: true
+    environment:
+      - GOPATH=/home/prehoda/go
+      - PATH=$PATH:$GOPATH/src/github.com/hyperledger/fabric/peer/scripts
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - FABRIC_LOGGING_SPEC=DEBUG
+      # - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_ID=cli
+      - CORE_PEER_ADDRESS=peer0.org1.pbnetwork.com:7051
+      - CORE_PEER_LOCALMSPID=Org1MSP
+      # - CORE_PEER_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_ENABLED=false
+      # - CORE_PEER_TLS_CERT_FILE=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.pbnetwork.com/peers/peer0.org1.pbnetwork.com/tls/server.crt
+      # - CORE_PEER_TLS_KEY_FILE=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.pbnetwork.com/peers/peer0.org1.pbnetwork.com/tls/server.key
+      # - CORE_PEER_TLS_ROOTCERT_FILE=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.pbnetwork.com/peers/peer0.org1.pbnetwork.com/tls/ca.crt
+      - CORE_PEER_MSPCONFIGPATH=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.pbnetwork.com/users/Admin@org1.pbnetwork.com/msp
+    working_dir: $GOPATH/src/github.com/hyperledger/fabric/peer
+    # command: /bin/bash
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./chaincode/:$GOPATH/src/github.com/chaincode
+        - ./crypto-config:$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/
+        - ./scripts:$GOPATH/src/github.com/hyperledger/fabric/peer/scripts/
+        - ./channel-artifacts:$GOPATH/src/github.com/hyperledger/fabric/peer/channel-artifacts
+        - $GOPATH/src/github.com/hyperledger/fabric:$GOPATH/src/github.com/hyperledger/fabric
+    depends_on:
+      - orderer.pbnetwork.com
+      - peer0.org1.pbnetwork.com
+      - peer0.org2.pbnetwork.com
+      - peer0.org3.pbnetwork.com
+    networks:
+      - onlab
