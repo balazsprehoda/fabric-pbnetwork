@@ -1,0 +1,14 @@
+# Generated crypto materials
+crypto-config/*
+
+# Generated anchors
+base/*
+!base/*.yaml
+
+# Generated CA files
+/ca/server/*
+!/ca/server/*.yaml
+/ca/clients/*
+
+# Generated channel artifacts
+/channel-artifacts
