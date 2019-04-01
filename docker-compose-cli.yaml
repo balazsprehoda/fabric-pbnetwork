@@ -4,6 +4,11 @@ networks:
   onlab:
 
 services:
+
+###########
+# orderer #
+###########
+
   orderer.pbnetwork.com:
     container_name: orderer.pbnetwork.com
     image: hyperledger/fabric-orderer
@@ -34,6 +39,10 @@ services:
         - ./crypto-config/peerOrganizations/org1.pbnetwork.com/peers/peer0.org1.pbnetwork.com/:/etc/hyperledger/msp/peerOrg1
     networks:
       - onlab
+
+#########
+# peers #
+#########
 
   peer0.org1.pbnetwork.com:
     container_name: peer0.org1.pbnetwork.com
@@ -179,6 +188,10 @@ services:
     networks:
       - onlab
 
+###########
+# CouchDB #
+###########
+
   couchdb.org1.pbnetwork.com:
     container_name: couchdb.org1.pbnetwork.com
     image: hyperledger/fabric-couchdb
@@ -217,6 +230,10 @@ services:
       - 6984:5984
     networks:
       - onlab
+
+#######
+# cli #
+#######
 
   cli:
     container_name: cli
