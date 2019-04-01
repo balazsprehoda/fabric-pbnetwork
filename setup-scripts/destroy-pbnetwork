@@ -6,8 +6,6 @@ export PATH=$PATH:$GOBIN
 
 docker rm -f $(docker ps -aq)
 
-cd $HOME/mycode/onlab/pbnetwork/base/
-sudo rm -r ./orderer.pbnetwork.com ./peer0.org1.pbnetwork.com ./peer0.org2.pbnetwork.com ./peer0.org3.pbnetwork.com
 cd $HOME/mycode/onlab/pbnetwork/ca/clients/
 sudo rm -r ./admin ./peer1 ./peer2 ./peer3 ./orderer
 cd $HOME/mycode/onlab/pbnetwork/ca/server/

@@ -14,7 +14,7 @@ CORE_PEER_MSPCONFIGPATH=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/pe
 
 CORE_PEER_MSPCONFIGPATH=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org3.pbnetwork.com/users/Admin@org3.pbnetwork.com/msp CORE_PEER_ADDRESS=peer0.org3.pbnetwork.com:7051 CORE_PEER_LOCALMSPID="Org3MSP" peer channel join -b mychannel.block
 
-CORE_PEER_MSPCONFIGPATH=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.pbnetwork.com/users/Admin@org1.pbnetwork.com/msp CORE_PEER_ADDRESS=peer0.org1.pbnetwork.com:7051 CORE_PEER_LOCALMSPID="Org1MSP"
+CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users1/Admin@org1.pbnetwork.com/msp CORE_PEER_ADDRESS=peer0.org1.pbnetwork.com:7051 CORE_PEER_LOCALMSPID="Org1MSP"
 
 peer channel update -o orderer.pbnetwork.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/Org1MSPanchors.tx
 

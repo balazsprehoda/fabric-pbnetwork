@@ -1,0 +1,33 @@
+#!/bin/bash
+
+export HOME=/home/prehoda
+export CHANNEL_NAME=mychannel
+export GOPATH=$HOME/go
+export GOROOT=/opt/go
+export GOBIN=$GOPATH/bin
+export PATH=$PATH:$GOBIN:$GOROOT/bin
+
+identify_as() {
+	if [ "$1" == "peer0.org1" ]; then
+        export CORE_PEER_MSPCONFIGPATH=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.pbnetwork.com/users/Admin@org1.pbnetwork.com/msp CORE_PEER_ADDRESS=peer0.org1.pbnetwork.com:7051 CORE_PEER_LOCALMSPID="Org1MSP"
+        echo "Identified as peer0.org1.pbnetwork.com"
+	fi
+    if [ "$1" == "peer0.org2" ]; then
+        export CORE_PEER_MSPCONFIGPATH=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.pbnetwork.com/users/Admin@org2.pbnetwork.com/msp CORE_PEER_ADDRESS=peer0.org2.pbnetwork.com:7051 CORE_PEER_LOCALMSPID="Org2MSP"
+        echo "Identified as peer0.org2.pbnetwork.com"
+    fi
+    if [ "$1" == "peer0.org3" ]; then
+        export CORE_PEER_MSPCONFIGPATH=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org3.pbnetwork.com/users/Admin@org3.pbnetwork.com/msp CORE_PEER_ADDRESS=peer0.org3.pbnetwork.com:7051 CORE_PEER_LOCALMSPID="Org3MSP"
+        echo "Identified as peer0.org3.pbnetwork.com"
+    fi
+}
+
+if [ $# == 2 ];
+then
+    identify_as $1
+
+    peer chaincode invoke -o orderer.pbnetwork.com:7050 -C $CHANNEL_NAME -n privatedata -c "{\"Args\":[\"getPenPrice\",\"$2\"]}"
+else
+    echo "Usage: query-private peerN.orgM ID"
+fi
+
