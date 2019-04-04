@@ -1,41 +1,188 @@
 #!/bin/bash
 
+DEBUG=false
+if [ "$1" == "debug" ];
+then
+DEBUG=true
+fi
+
 export GOPATH=/home/prehoda/go
 export GOBIN=$GOPATH/bin
 export PATH=$PATH:$GOBIN
 
-export FABRIC_CA_CLIENT_HOME=$HOME/mycode/onlab/pbnetwork/ca/clients/admin
+export FABRIC_CA_CLIENT_HOME=$HOME/mycode/onlab/pbnetwork/ca/clients/admin1
 fabric-ca-client enroll -u http://admin:adminpw@localhost:7054
+# mkdir /home/prehoda/mycode/onlab/pbnetwork/crypto-config/cas/org1.pbnetwork.com/client/
+# export FABRIC_CA_CLIENT_HOME=/home/prehoda/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org1.pbnetwork.com/peers/peer0.org1.pbnetwork.com
 fabric-ca-client register --id.name admin2 --id.affiliation org1 --id.attrs 'hf.Revoker=true,admin=true:ecert'
+
+################
+# Org1
+################
+
+if [ $DEBUG ];
+then
+    echo
+    echo "###################################################### Generating certs for Org1 ######################################################"
+    echo "Registering peer1 and adminOrg1"
+    echo
+fi
 
 fabric-ca-client register --id.name peer1 --id.type peer --id.affiliation org1 --id.secret peer1pw
 fabric-ca-client register --id.name adminOrg1 --id.type client --id.affiliation org1 --id.secret adminpw
-fabric-ca-client register --id.name adminOrg2 --id.type client --id.affiliation org2 --id.secret adminpw
-fabric-ca-client register --id.name adminOrg3 --id.type client --id.affiliation org3 --id.secret adminpw
 
-export FABRIC_CA_CLIENT_HOME=$HOME/mycode/onlab/pbnetwork/ca/clients/peer1
-fabric-ca-client enroll -u http://peer1:peer1pw@localhost:7054 -M /home/prehoda/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org1.pbnetwork.com/peers/peer0.org1.pbnetwork.com/msp
+
+export FABRIC_CA_CLIENT_HOME=$HOME/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org1.pbnetwork.com/peers/peer0.org1.pbnetwork.com
+
+if [ $DEBUG ];
+then
+    echo
+    echo "Enrolling peer1 and adminOrg1"
+    echo
+fi
+
+fabric-ca-client enroll -u http://peer1:peer1pw@localhost:7054 -M $FABRIC_CA_CLIENT_HOME/msp
 fabric-ca-client enroll -u http://adminOrg1:adminpw@localhost:7054 -M /home/prehoda/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org1.pbnetwork.com/users/Admin@org1.pbnetwork.com/msp
 
-export FABRIC_CA_CLIENT_HOME=$HOME/mycode/onlab/pbnetwork/ca/clients/admin
-fabric-ca-client enroll -u http://admin:adminpw@localhost:7054
-fabric-ca-client register --id.name peer2 --id.type peer --id.affiliation org2 --id.secret peer2pw
-export FABRIC_CA_CLIENT_HOME=$HOME/mycode/onlab/pbnetwork/ca/clients/peer2
-fabric-ca-client enroll -u http://peer2:peer2pw@localhost:7054 -M /home/prehoda/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org2.pbnetwork.com/peers/peer0.org2.pbnetwork.com/msp
-fabric-ca-client enroll -u http://adminOrg2:adminpw@localhost:7054 -M /home/prehoda/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org2.pbnetwork.com/users/Admin@org2.pbnetwork.com/msp
+if [ $DEBUG ];
+then
+    echo
+    echo "Getting ca info from ca.org2.pbnetwork.com and ca.org3.pbnetwork.com"
+    echo
+fi
 
-export FABRIC_CA_CLIENT_HOME=$HOME/mycode/onlab/pbnetwork/ca/clients/admin
-fabric-ca-client enroll -u http://admin:adminpw@localhost:7054
+fabric-ca-client getcainfo -u http://localhost:7055 -M $FABRIC_CA_CLIENT_HOME/msp
+fabric-ca-client getcainfo -u http://localhost:7056 -M $FABRIC_CA_CLIENT_HOME/msp
+
+################
+# Org2
+################
+
+if [ $DEBUG ];
+then
+    echo
+    echo "###################################################### Generating certs for Org2 ######################################################"
+    echo "Registering peer2 and adminOrg2"
+    echo
+fi
+
+export FABRIC_CA_CLIENT_HOME=$HOME/mycode/onlab/pbnetwork/ca/clients/admin2
+fabric-ca-client enroll -u http://admin:adminpw@localhost:7055
+
+fabric-ca-client register --id.name adminOrg2 --id.type client --id.affiliation org2 --id.secret adminpw
+fabric-ca-client register --id.name peer2 --id.type peer --id.affiliation org2 --id.secret peer2pw
+
+export FABRIC_CA_CLIENT_HOME=$HOME/mycode/onlab/pbnetwork/ca/clients/peer2
+
+if [ $DEBUG ];
+then
+    echo
+    echo "Enrolling peer2 and adminOrg2"
+    echo
+fi
+
+fabric-ca-client enroll -u http://peer2:peer2pw@localhost:7055 -M /home/prehoda/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org2.pbnetwork.com/peers/peer0.org2.pbnetwork.com/msp
+fabric-ca-client enroll -u http://adminOrg2:adminpw@localhost:7055 -M /home/prehoda/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org2.pbnetwork.com/users/Admin@org2.pbnetwork.com/msp
+
+if [ $DEBUG ];
+then
+    echo
+    echo "Getting ca info from ca.org1.pbnetwork.com and ca.org3.pbnetwork.com"
+    echo
+fi
+
+fabric-ca-client getcainfo -u http://localhost:7054 -M /home/prehoda/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org2.pbnetwork.com/peers/peer0.org2.pbnetwork.com/msp
+fabric-ca-client getcainfo -u http://localhost:7056 -M /home/prehoda/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org2.pbnetwork.com/peers/peer0.org2.pbnetwork.com/msp
+
+################
+# Org3
+################
+
+export FABRIC_CA_CLIENT_HOME=$HOME/mycode/onlab/pbnetwork/ca/clients/admin3
+fabric-ca-client enroll -u http://admin:adminpw@localhost:7056
+
+# Adding org3, default config file contains only org1 and org2
+if [ $DEBUG ];
+then
+    echo
+    echo "###################################################### Adding org3 to affiliations ######################################################"
+    echo
+fi
+
+fabric-ca-client affiliation add org3
+fabric-ca-client affiliation add org3.department1
+
+if [ $DEBUG ];
+then
+    echo
+    echo "###################################################### Generating certs for Org2 ######################################################"
+    echo "Registering peer2 and adminOrg2"
+    echo
+fi
+
+fabric-ca-client register --id.name adminOrg3 --id.type client --id.affiliation org3 --id.secret adminpw
 fabric-ca-client register --id.name peer3 --id.type peer --id.affiliation org3 --id.secret peer3pw
 export FABRIC_CA_CLIENT_HOME=$HOME/mycode/onlab/pbnetwork/ca/clients/peer3
-fabric-ca-client enroll -u http://peer3:peer3pw@localhost:7054 -M /home/prehoda/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org3.pbnetwork.com/peers/peer0.org3.pbnetwork.com/msp
-fabric-ca-client enroll -u http://adminOrg3:adminpw@localhost:7054 -M /home/prehoda/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org3.pbnetwork.com/users/Admin@org3.pbnetwork.com/msp
+
+if [ $DEBUG ];
+then
+    echo
+    echo "Enrolling peer2 and adminOrg2"
+    echo
+fi
+
+fabric-ca-client enroll -u http://peer3:peer3pw@localhost:7056 -M /home/prehoda/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org3.pbnetwork.com/peers/peer0.org3.pbnetwork.com/msp
+fabric-ca-client enroll -u http://adminOrg3:adminpw@localhost:7056 -M /home/prehoda/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org3.pbnetwork.com/users/Admin@org3.pbnetwork.com/msp
+
+if [ $DEBUG ];
+then
+    echo
+    echo "Getting ca info from ca.org1.pbnetwork.com and ca.org2.pbnetwork.com"
+    echo
+fi
+
+fabric-ca-client getcainfo -u http://localhost:7054 -M /home/prehoda/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org3.pbnetwork.com/peers/peer0.org3.pbnetwork.com/msp
+fabric-ca-client getcainfo -u http://localhost:7055 -M /home/prehoda/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org3.pbnetwork.com/peers/peer0.org3.pbnetwork.com/msp
+
+################
+# Orderer
+################
+
+if [ $DEBUG ];
+then
+    echo
+    echo "###################################################### Generating certs for Orderer ######################################################"
+    echo "Registering orderer"
+    echo
+fi
 
 export FABRIC_CA_CLIENT_HOME=$HOME/mycode/onlab/pbnetwork/ca/clients/admin
 fabric-ca-client enroll -u http://admin:adminpw@localhost:7054
 fabric-ca-client register --id.name orderer --id.type orderer --id.affiliation org1 --id.secret ordererpw
 export FABRIC_CA_CLIENT_HOME=$HOME/mycode/onlab/pbnetwork/ca/clients/orderer
+
+if [ $DEBUG ];
+then
+    echo
+    echo "Enrolling peer2 and adminOrg2"
+    echo
+fi
+
 fabric-ca-client enroll -u http://orderer:ordererpw@localhost:7054 -M /home/prehoda/mycode/onlab/pbnetwork/crypto-config/ordererOrganizations/pbnetwork.com/orderers/orderer.pbnetwork.com/
+
+if [ $DEBUG ];
+then
+    echo
+    echo "Getting ca info from ca.org2.pbnetwork.com and ca.org3.pbnetwork.com"
+    echo
+fi
+
+fabric-ca-client getcainfo -u http://localhost:7055 -M /home/prehoda/mycode/onlab/pbnetwork/crypto-config/ordererOrganizations/pbnetwork.com/orderers/orderer.pbnetwork.com/
+fabric-ca-client getcainfo -u http://localhost:7056 -M /home/prehoda/mycode/onlab/pbnetwork/crypto-config/ordererOrganizations/pbnetwork.com/orderers/orderer.pbnetwork.com/
+
+#####################
+# Populate admincerts
+#####################
 
 mkdir $HOME/mycode/onlab/pbnetwork/crypto-config/ordererOrganizations/pbnetwork.com/orderers/orderer.pbnetwork.com/admincerts
 cp -i $HOME/mycode/onlab/pbnetwork/crypto-config/ordererOrganizations/pbnetwork.com/orderers/orderer.pbnetwork.com/signcerts/cert.pem $HOME/mycode/onlab/pbnetwork/crypto-config/ordererOrganizations/pbnetwork.com/orderers/orderer.pbnetwork.com/admincerts
@@ -51,4 +198,3 @@ cp -i $HOME/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org2.pbnetwor
 mkdir $HOME/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org3.pbnetwork.com/peers/peer0.org3.pbnetwork.com/msp/admincerts $HOME/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org3.pbnetwork.com/users/Admin@org3.pbnetwork.com/msp/admincerts
 cp -i $HOME/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org3.pbnetwork.com/users/Admin@org3.pbnetwork.com/msp/signcerts/cert.pem $HOME/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org3.pbnetwork.com/peers/peer0.org3.pbnetwork.com/msp/admincerts
 cp -i $HOME/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org3.pbnetwork.com/users/Admin@org3.pbnetwork.com/msp/signcerts/cert.pem $HOME/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org3.pbnetwork.com/users/Admin@org3.pbnetwork.com/msp/admincerts
-
