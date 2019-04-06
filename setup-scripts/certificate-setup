@@ -44,7 +44,7 @@ then
     echo
 fi
 
-fabric-ca-client enroll -u https://peer1:peer1pw@localhost:7054 -M $FABRIC_CA_CLIENT_HOME/msp --tls.certfiles $HOME/mycode/onlab/pbnetwork/ca/tlscacerts/tlscacert1.pem,$HOME/mycode/onlab/pbnetwork/ca/tlscacerts/tlscacert2.pem,$HOME/mycode/onlab/pbnetwork/ca/tlscacerts/tlscacert3.pem
+fabric-ca-client enroll -u https://peer1:peer1pw@localhost:7054 -M /home/prehoda/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org1.pbnetwork.com/peers/peer0.org1.pbnetwork.com/msp --tls.certfiles $HOME/mycode/onlab/pbnetwork/ca/tlscacerts/tlscacert1.pem,$HOME/mycode/onlab/pbnetwork/ca/tlscacerts/tlscacert2.pem,$HOME/mycode/onlab/pbnetwork/ca/tlscacerts/tlscacert3.pem
 fabric-ca-client enroll -u https://adminOrg1:adminpw@localhost:7054 -M /home/prehoda/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org1.pbnetwork.com/users/Admin@org1.pbnetwork.com/msp --tls.certfiles $HOME/mycode/onlab/pbnetwork/ca/tlscacerts/tlscacert1.pem,$HOME/mycode/onlab/pbnetwork/ca/tlscacerts/tlscacert2.pem,$HOME/mycode/onlab/pbnetwork/ca/tlscacerts/tlscacert3.pem
 
 if [ "$DEBUG" = true ];
@@ -54,8 +54,8 @@ then
     echo
 fi
 
-fabric-ca-client getcainfo -u https://localhost:7055 -M $FABRIC_CA_CLIENT_HOME/msp --tls.certfiles $HOME/mycode/onlab/pbnetwork/ca/tlscacerts/tlscacert1.pem,$HOME/mycode/onlab/pbnetwork/ca/tlscacerts/tlscacert2.pem,$HOME/mycode/onlab/pbnetwork/ca/tlscacerts/tlscacert3.pem
-fabric-ca-client getcainfo -u https://localhost:7056 -M $FABRIC_CA_CLIENT_HOME/msp --tls.certfiles $HOME/mycode/onlab/pbnetwork/ca/tlscacerts/tlscacert1.pem,$HOME/mycode/onlab/pbnetwork/ca/tlscacerts/tlscacert2.pem,$HOME/mycode/onlab/pbnetwork/ca/tlscacerts/tlscacert3.pem
+fabric-ca-client getcainfo -u https://localhost:7055 -M /home/prehoda/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org1.pbnetwork.com/peers/peer0.org1.pbnetwork.com/msp --tls.certfiles $HOME/mycode/onlab/pbnetwork/ca/tlscacerts/tlscacert1.pem,$HOME/mycode/onlab/pbnetwork/ca/tlscacerts/tlscacert2.pem,$HOME/mycode/onlab/pbnetwork/ca/tlscacerts/tlscacert3.pem
+fabric-ca-client getcainfo -u https://localhost:7056 -M /home/prehoda/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org1.pbnetwork.com/peers/peer0.org1.pbnetwork.com/msp --tls.certfiles $HOME/mycode/onlab/pbnetwork/ca/tlscacerts/tlscacert1.pem,$HOME/mycode/onlab/pbnetwork/ca/tlscacerts/tlscacert2.pem,$HOME/mycode/onlab/pbnetwork/ca/tlscacerts/tlscacert3.pem
 
 ################
 # Org2
