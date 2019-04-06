@@ -7,9 +7,8 @@ export PATH=$PATH:$GOBIN
 docker rm -f $(docker ps -aq)
 
 cd $HOME/mycode/onlab/pbnetwork/ca/clients/
-sudo rm -r ./admin ./peer1 ./peer2 ./peer3 ./orderer
-cd $HOME/mycode/onlab/pbnetwork/ca/server/
-sudo rm -r ./msp ./ca-cert.pem ./IssuerPublicKey ./IssuerRevocationPublicKey ./fabric-ca-server.db
+sudo rm -r ./admin1 ./admin2 ./admin3 ./peer1 ./peer2 ./peer3 ./orderer
+sudo rm -r $HOME/mycode/onlab/pbnetwork/ca/tlscacerts
 cd $HOME/mycode/onlab/pbnetwork/
 sudo rm -r ./channel-artifacts
-sudo rm -r ./crypto-config/peerOrganizations/ ./crypto-config/ordererOrganizations/
+sudo rm -r ./crypto-config/peerOrganizations/ ./crypto-config/ordererOrganizations/ ./crypto-config/cas
