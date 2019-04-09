@@ -8,25 +8,25 @@ export GOBIN=$GOPATH/bin
 export PATH=$PATH:$GOBIN:$GOROOT/bin
 
 identify_as() {
-	if [ "$1" == "peer0.org1" ]; then
-		export CORE_PEER_MSPCONFIGPATH=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.pbnetwork.com/users/Admin@org1.pbnetwork.com/msp CORE_PEER_ADDRESS=peer0.org1.pbnetwork.com:7051 CORE_PEER_LOCALMSPID="Org1MSP"
-		echo "Identified as peer0.org1.pbnetwork.com"
-	fi
-	if [ "$1" == "peer0.org2" ]; then
-	    export CORE_PEER_MSPCONFIGPATH=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.pbnetwork.com/users/Admin@org2.pbnetwork.com/msp CORE_PEER_ADDRESS=peer0.org2.pbnetwork.com:7051 CORE_PEER_LOCALMSPID="Org2MSP"
-	    echo "Identified as peer0.org2.pbnetwork.com"
-	fi
-	if [ "$1" == "peer0.org3" ]; then
-	    export CORE_PEER_MSPCONFIGPATH=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org3.pbnetwork.com/users/Admin@org3.pbnetwork.com/msp CORE_PEER_ADDRESS=peer0.org3.pbnetwork.com:7051 CORE_PEER_LOCALMSPID="Org3MSP"
-	    echo "Identified as peer0.org3.pbnetwork.com"
-	fi
+if [ "$1" == "peer0.org1" ]; then
+	export CORE_PEER_MSPCONFIGPATH=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.pbnetwork.com/users/Admin@org1.pbnetwork.com/msp CORE_PEER_ADDRESS=peer0.org1.pbnetwork.com:7051 CORE_PEER_LOCALMSPID="Org1MSP" CORE_PEER_TLS_ROOTCERT_FILE=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.pbnetwork.com/peers/peer0.org1.pbnetwork.com/tls/tlscacerts/tls-localhost-7054.pem
+	echo "Identified as peer0.org1.pbnetwork.com"
+fi
+if [ "$1" == "peer0.org2" ]; then
+    export CORE_PEER_MSPCONFIGPATH=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.pbnetwork.com/users/Admin@org2.pbnetwork.com/msp CORE_PEER_ADDRESS=peer0.org2.pbnetwork.com:7051 CORE_PEER_LOCALMSPID="Org2MSP" CORE_PEER_TLS_ROOTCERT_FILE=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.pbnetwork.com/peers/peer0.org2.pbnetwork.com/tls/tlscacerts/tls-localhost-7055.pem
+    echo "Identified as peer0.org2.pbnetwork.com"
+fi
+if [ "$1" == "peer0.org3" ]; then
+    export CORE_PEER_MSPCONFIGPATH=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org3.pbnetwork.com/users/Admin@org3.pbnetwork.com/msp CORE_PEER_ADDRESS=peer0.org3.pbnetwork.com:7051 CORE_PEER_LOCALMSPID="Org3MSP" CORE_PEER_TLS_ROOTCERT_FILE=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org3.pbnetwork.com/peers/peer0.org3.pbnetwork.com/tls/tlscacerts/tls-localhost-7056.pem
+    echo "Identified as peer0.org3.pbnetwork.com"
+fi
 }
 
 if [ $# == 9 ];
 then
 	identify_as $1
 
-	peer chaincode invoke -o orderer.pbnetwork.com:7050 -C $CHANNEL_NAME -n privatedata -c "{\"Args\":[\"createPen\",\"$2\",\"$3\", \"$4\", \"$5 cm\", \"$6 mm\", \"$7 mm\", \"$8\", \"$9\"]}"
+	peer chaincode invoke -o orderer.pbnetwork.com:7050 -C $CHANNEL_NAME -n privatedata -c "{\"Args\":[\"createPen\",\"$2\",\"$3\", \"$4\", \"$5 cm\", \"$6 mm\", \"$7 mm\", \"$8\", \"$9\"]}" --tls --cafile $GOPATH/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/pbnetwork.com/orderers/orderer.pbnetwork.com/tls/tlscacerts/tls-localhost-7054.pem
 else
 	echo "Usage: create-pen peerN.orgM ID Model Color Length(cm) Width(mm) LineWidth(mm) BuyPrice SellPrice"
 fi
