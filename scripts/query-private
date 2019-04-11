@@ -26,7 +26,7 @@ if [ $# == 2 ];
 then
     identify_as $1
 
-    peer chaincode invoke -o orderer.pbnetwork.com:7050 -C $CHANNEL_NAME -n privatedata -c "{\"Args\":[\"getPenPrice\",\"$2\"]}" --tls --cafile $GOPATH/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/pbnetwork.com/orderers/orderer.pbnetwork.com/tls/tlscacerts/tls-localhost-7054.pem
+    peer chaincode query -o orderer.pbnetwork.com:7050 -C $CHANNEL_NAME -n privatedata -c "{\"Args\":[\"getPenPrice\",\"$2\"]}" --tls --cafile $GOPATH/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/pbnetwork.com/orderers/orderer.pbnetwork.com/tls/tlscacerts/tls-localhost-7054.pem
 else
     echo "Usage: query-private peerN.orgM ID"
 fi
