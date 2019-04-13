@@ -19,6 +19,15 @@ Organizations:
             - Host: peer0.org1.pbnetwork.com
               Port: 7051
 
+    - &Org1Idemix
+        Name: idemixMSP1
+
+        ID: idemixMSPID1
+
+        MSPTYPE: idemix
+
+        MSPDIR: crypto-config/peerOrganizations/org1.pbnetwork.com/idemix/
+
     - &Org2
         Name: Org2MSP
 
@@ -30,6 +39,15 @@ Organizations:
             - Host: peer0.org2.pbnetwork.com
               Port: 7051
 
+    - &Org2Idemix
+        Name: idemixMSP2
+
+        ID: idemixMSPID2
+
+        MSPTYPE: idemix
+
+        MSPDIR: crypto-config/peerOrganizations/org2.pbnetwork.com/idemix/
+
     - &Org3
         Name: Org3MSP
 
@@ -40,6 +58,15 @@ Organizations:
         AnchorPeers:
             - Host: peer0.org3.pbnetwork.com
               Port: 7051
+
+    - &Org3Idemix
+        Name: idemixMSP3
+
+        ID: idemixMSPID3
+
+        MSPTYPE: idemix
+
+        MSPDIR: crypto-config/peerOrganizations/org3.pbnetwork.com/idemix/
 
 Capabilities:
 
@@ -87,6 +114,8 @@ Application: &ApplicationDefaults
 Profiles:
 
     ThreeOrgsOrdererGenesis:
+        Capabilities:
+            <<: *ChannelCapabilities
         Orderer:
             <<: *OrdererDefaults
             Organizations:
@@ -99,6 +128,9 @@ Profiles:
                     - *Org1
                     - *Org2
                     - *Org3
+                    - *Org1Idemix
+                    - *Org2Idemix
+                    - *Org3Idemix
     ThreeOrgsChannel:
         Consortium: SampleConsortium
         Application:
@@ -107,5 +139,8 @@ Profiles:
                 - *Org1
                 - *Org2
                 - *Org3
+                - *Org1Idemix
+                - *Org2Idemix
+                - *Org3Idemix
             Capabilities:
                 <<: *ApplicationCapabilities

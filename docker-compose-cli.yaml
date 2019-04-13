@@ -13,7 +13,7 @@ services:
     container_name: orderer.pbnetwork.com
     image: hyperledger/fabric-orderer
     environment:
-      - GOPATH=/home/prehoda/go
+      - GOPATH=$HOME/go
       - FABRIC_LOGGING_SPEC=debug
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
       - ORDERER_GENERAL_GENESISMETHOD=file
@@ -47,7 +47,7 @@ services:
     container_name: peer0.org1.pbnetwork.com
     image: hyperledger/fabric-peer
     environment:
-      - GOPATH=/home/prehoda/go
+      - GOPATH=$HOME/go
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       # the following setting starts chaincode containers on the same
       # bridge network as the peers
@@ -95,7 +95,7 @@ services:
     container_name: peer0.org2.pbnetwork.com
     image: hyperledger/fabric-peer
     environment:
-      - GOPATH=/home/prehoda/go
+      - GOPATH=$HOME/go
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       # the following setting starts chaincode containers on the same
       # bridge network as the peers
@@ -143,7 +143,7 @@ services:
     container_name: peer0.org3.pbnetwork.com
     image: hyperledger/fabric-peer
     environment:
-      - GOPATH=/home/prehoda/go
+      - GOPATH=$HOME/go
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       # the following setting starts chaincode containers on the same
       # bridge network as the peers
@@ -240,7 +240,7 @@ services:
     tty: true
     stdin_open: true
     environment:
-      - GOPATH=/home/prehoda/go
+      - GOPATH=$HOME/go
       - PATH=$PATH:$GOPATH/src/github.com/hyperledger/fabric/peer/scripts
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - FABRIC_LOGGING_SPEC=DEBUG

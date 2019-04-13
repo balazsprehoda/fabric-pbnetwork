@@ -6,7 +6,7 @@ then
 DEBUG=true
 fi
 
-export GOPATH=/home/prehoda/go
+export GOPATH=$HOME/go
 export GOBIN=$GOPATH/bin
 export PATH=$PATH:$GOBIN
 
@@ -20,7 +20,7 @@ export TLSCACERT2=$HOME/mycode/onlab/pbnetwork/ca/tlscacerts/tlscacert2.pem
 export TLSCACERT3=$HOME/mycode/onlab/pbnetwork/ca/tlscacerts/tlscacert3.pem
 
 export FABRIC_CA_CLIENT_HOME=$HOME/mycode/onlab/pbnetwork/ca/clients/admin1
-fabric-ca-client enroll -u https://admin:adminpw@localhost:7054 --tls.certfiles $TLSCACERT1 -M $FABRIC_CA_CLIENT_HOME/msp
+fabric-ca-client enroll -u https://admin:adminpw@localhost:7054 --tls.certfiles $TLSCACERT1 -M $FABRIC_CA_CLIENT_HOME/msp --enrollment.type 'idemix'
 
 ################
 # Orderer + Org1
@@ -35,6 +35,7 @@ then
     echo
 fi
 
+export FABRIC_CA_CLIENT_HOME=$HOME/mycode/onlab/pbnetwork/ca/clients/admin1
 fabric-ca-client register -u https://admin:adminpw@localhost:7054 --id.name orderer --id.type orderer --id.affiliation org1 --id.secret ordererpw --tls.certfiles $TLSCACERT1
 
 if [ "$DEBUG" = true ];
@@ -58,6 +59,7 @@ then
 fi
 
 fabric-ca-client enroll -u https://orderer:ordererpw@localhost:7054 -M $FABRIC_CA_CLIENT_HOME/msp --tls.certfiles $TLSCACERT1
+fabric-ca-client enroll -u https://orderer:ordererpw@localhost:7054 -M $FABRIC_CA_CLIENT_HOME/msp --tls.certfiles $TLSCACERT1 --enrollment.type 'idemix'
 
 fabric-ca-client enroll -u https://orderer:ordererpw@localhost:7054 -M $FABRIC_CA_CLIENT_HOME/tls --tls.certfiles $TLSCACERT1 --enrollment.profile tls --csr.hosts orderer.pbnetwork.com
 
@@ -83,6 +85,7 @@ then
 fi
 
 fabric-ca-client enroll -u https://peer1:peer1pw@localhost:7054 -M $FABRIC_CA_CLIENT_HOME/msp --tls.certfiles $TLSCACERT1
+fabric-ca-client enroll -u https://peer1:peer1pw@localhost:7054 -M $FABRIC_CA_CLIENT_HOME/msp --tls.certfiles $TLSCACERT1 --enrollment.type 'idemix'
 
 fabric-ca-client enroll -u https://peer1:peer1pw@localhost:7054 -M $FABRIC_CA_CLIENT_HOME/tls --tls.certfiles $TLSCACERT1 --enrollment.profile tls --csr.hosts peer0.org1.pbnetwork.com
 
@@ -91,6 +94,7 @@ mv $FABRIC_CA_CLIENT_HOME/tls/keystore/*_sk $FABRIC_CA_CLIENT_HOME/tls/keystore/
 export FABRIC_CA_CLIENT_HOME=$HOME/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org1.pbnetwork.com/users/Admin@org1.pbnetwork.com
 
 fabric-ca-client enroll -u https://adminOrg1:adminpw@localhost:7054 -M $FABRIC_CA_CLIENT_HOME/msp --tls.certfiles $TLSCACERT1
+fabric-ca-client enroll -u https://adminOrg1:adminpw@localhost:7054 -M $FABRIC_CA_CLIENT_HOME/msp --tls.certfiles $TLSCACERT1 --enrollment.type 'idemix'
 
 if [ "$DEBUG" = true ];
 then
@@ -118,6 +122,7 @@ fi
 
 export FABRIC_CA_CLIENT_HOME=$HOME/mycode/onlab/pbnetwork/ca/clients/admin2
 fabric-ca-client enroll -u https://admin:adminpw@localhost:7055 --tls.certfiles $TLSCACERT2 -M $FABRIC_CA_CLIENT_HOME/msp
+fabric-ca-client enroll -u https://admin:adminpw@localhost:7055 --tls.certfiles $TLSCACERT2 -M $FABRIC_CA_CLIENT_HOME/msp --enrollment.type 'idemix'
 
 fabric-ca-client register -u https://admin:adminpw@localhost:7055 --id.name adminOrg2 --id.type user --id.affiliation org2 --id.secret adminpw --tls.certfiles $TLSCACERT2
 
@@ -133,6 +138,7 @@ then
 fi
 
 fabric-ca-client enroll -u https://peer2:peer2pw@localhost:7055 -M $FABRIC_CA_CLIENT_HOME/msp --tls.certfiles $TLSCACERT2
+fabric-ca-client enroll -u https://peer2:peer2pw@localhost:7055 -M $FABRIC_CA_CLIENT_HOME/msp --tls.certfiles $TLSCACERT2 --enrollment.type 'idemix'
 
 fabric-ca-client enroll -u https://peer2:peer2pw@localhost:7055 -M $FABRIC_CA_CLIENT_HOME/tls --tls.certfiles $TLSCACERT2 --enrollment.profile tls --csr.hosts peer0.org2.pbnetwork.com
 
@@ -141,6 +147,7 @@ mv $FABRIC_CA_CLIENT_HOME/tls/keystore/*_sk $FABRIC_CA_CLIENT_HOME/tls/keystore/
 export FABRIC_CA_CLIENT_HOME=$HOME/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org2.pbnetwork.com/users/Admin@org2.pbnetwork.com
 
 fabric-ca-client enroll -u https://adminOrg2:adminpw@localhost:7055 -M $FABRIC_CA_CLIENT_HOME/msp --tls.certfiles $TLSCACERT2
+fabric-ca-client enroll -u https://adminOrg2:adminpw@localhost:7055 -M $FABRIC_CA_CLIENT_HOME/msp --tls.certfiles $TLSCACERT2 --enrollment.type 'idemix'
 
 if [ "$DEBUG" = true ];
 then
@@ -160,6 +167,7 @@ fabric-ca-client getcainfo -u https://localhost:7056 -M $FABRIC_CA_CLIENT_HOME/m
 
 export FABRIC_CA_CLIENT_HOME=$HOME/mycode/onlab/pbnetwork/ca/clients/admin3
 fabric-ca-client enroll -u https://admin:adminpw@localhost:7056 --tls.certfiles $TLSCACERT3 -M $FABRIC_CA_CLIENT_HOME/msp
+fabric-ca-client enroll -u https://admin:adminpw@localhost:7056 --tls.certfiles $TLSCACERT3 -M $FABRIC_CA_CLIENT_HOME/msp --enrollment.type 'idemix'
 
 # Adding org3, default config file contains only org1 and org2
 if [ "$DEBUG" = true ];
@@ -194,6 +202,7 @@ then
 fi
 
 fabric-ca-client enroll -u https://peer3:peer3pw@localhost:7056 -M $FABRIC_CA_CLIENT_HOME/msp --tls.certfiles $TLSCACERT3
+fabric-ca-client enroll -u https://peer3:peer3pw@localhost:7056 -M $FABRIC_CA_CLIENT_HOME/msp --tls.certfiles $TLSCACERT3 --enrollment.type 'idemix'
 
 fabric-ca-client enroll -u https://peer3:peer3pw@localhost:7056 -M $FABRIC_CA_CLIENT_HOME/tls --tls.certfiles $TLSCACERT3 --enrollment.profile tls --csr.hosts peer0.org3.pbnetwork.com
 
@@ -202,6 +211,7 @@ mv $FABRIC_CA_CLIENT_HOME/tls/keystore/*_sk $FABRIC_CA_CLIENT_HOME/tls/keystore/
 export FABRIC_CA_CLIENT_HOME=$HOME/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org3.pbnetwork.com/users/Admin@org3.pbnetwork.com
 
 fabric-ca-client enroll -u https://adminOrg3:adminpw@localhost:7056 -M $FABRIC_CA_CLIENT_HOME/msp --tls.certfiles $TLSCACERT3
+fabric-ca-client enroll -u https://adminOrg3:adminpw@localhost:7056 -M $FABRIC_CA_CLIENT_HOME/msp --tls.certfiles $TLSCACERT3 --enrollment.type 'idemix'
 
 if [ "$DEBUG" = true ];
 then
@@ -300,4 +310,33 @@ cp $HOME/mycode/onlab/pbnetwork/crypto-config/cas/ca.org1.pbnetwork.com/ca/ca.or
 cp $HOME/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org1.pbnetwork.com/users/Admin@org1.pbnetwork.com/msp/signcerts/cert.pem $HOME/mycode/onlab/pbnetwork/crypto-config/ordererOrganizations/pbnetwork.com/msp/admincerts
 cp $HOME/mycode/onlab/pbnetwork/crypto-config/cas/ca.org1.pbnetwork.com/ca/ca.org1.pbnetwork.com-cert.pem $HOME/mycode/onlab/pbnetwork/crypto-config/ordererOrganizations/pbnetwork.com/msp/tlscacerts
 
+###########################################
+# Set up Idemix MSPs
+###########################################
+
+if [ "$DEBUG" = true ];
+then
+    echo
+    echo "---------------------- Setting up Idemix MSPs ----------------------"
+    echo
+fi
+
+mkdir -p $HOME/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org1.pbnetwork.com/idemix/msp/keystore
+mkdir -p $HOME/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org2.pbnetwork.com/idemix/msp/keystore
+mkdir -p $HOME/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org3.pbnetwork.com/idemix/msp/keystore
+
+cp $HOME/mycode/onlab/pbnetwork/crypto-config/cas/ca.org1.pbnetwork.com/ca/IssuerPublicKey $HOME/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org1.pbnetwork.com/idemix/msp
+cp $HOME/mycode/onlab/pbnetwork/crypto-config/cas/ca.org1.pbnetwork.com/ca/IssuerRevocationPublicKey $HOME/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org1.pbnetwork.com/idemix/msp/RevocationPublicKey
+cp $HOME/mycode/onlab/pbnetwork/crypto-config/cas/ca.org1.pbnetwork.com/ca/msp/keystore/IssuerSecretKey $HOME/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org1.pbnetwork.com/idemix/msp/keystore
+cp $HOME/mycode/onlab/pbnetwork/crypto-config/cas/ca.org1.pbnetwork.com/ca/msp/keystore/IssuerRevocationPrivateKey $HOME/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org1.pbnetwork.com/idemix/msp/keystore/RevocationPrivateKey
+
+cp $HOME/mycode/onlab/pbnetwork/crypto-config/cas/ca.org2.pbnetwork.com/ca/IssuerPublicKey $HOME/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org2.pbnetwork.com/idemix/msp
+cp $HOME/mycode/onlab/pbnetwork/crypto-config/cas/ca.org2.pbnetwork.com/ca/IssuerRevocationPublicKey $HOME/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org2.pbnetwork.com/idemix/msp/RevocationPublicKey
+cp $HOME/mycode/onlab/pbnetwork/crypto-config/cas/ca.org2.pbnetwork.com/ca/msp/keystore/IssuerSecretKey $HOME/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org2.pbnetwork.com/idemix/msp/keystore
+cp $HOME/mycode/onlab/pbnetwork/crypto-config/cas/ca.org2.pbnetwork.com/ca/msp/keystore/IssuerRevocationPrivateKey $HOME/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org2.pbnetwork.com/idemix/msp/keystore/RevocationPrivateKey
+
+cp $HOME/mycode/onlab/pbnetwork/crypto-config/cas/ca.org3.pbnetwork.com/ca/IssuerPublicKey $HOME/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org3.pbnetwork.com/idemix/msp
+cp $HOME/mycode/onlab/pbnetwork/crypto-config/cas/ca.org3.pbnetwork.com/ca/IssuerRevocationPublicKey $HOME/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org3.pbnetwork.com/idemix/msp/RevocationPublicKey
+cp $HOME/mycode/onlab/pbnetwork/crypto-config/cas/ca.org3.pbnetwork.com/ca/msp/keystore/IssuerSecretKey $HOME/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org3.pbnetwork.com/idemix/msp/keystore
+cp $HOME/mycode/onlab/pbnetwork/crypto-config/cas/ca.org3.pbnetwork.com/ca/msp/keystore/IssuerRevocationPrivateKey $HOME/mycode/onlab/pbnetwork/crypto-config/peerOrganizations/org3.pbnetwork.com/idemix/msp/keystore/RevocationPrivateKey
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export HOME=/home/prehoda
+export HOME=/home/prehi
 export CHANNEL_NAME=mychannel
 export GOPATH=$HOME/go
 export GOROOT=/opt/go

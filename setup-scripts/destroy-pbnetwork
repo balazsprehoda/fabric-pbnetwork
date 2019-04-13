@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export GOPATH=/home/prehoda/go
+export GOPATH=$HOME/go
 export GOBIN=$GOPATH/bin
 export PATH=$PATH:$GOBIN
 
