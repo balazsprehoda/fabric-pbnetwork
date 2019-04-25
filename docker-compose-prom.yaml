@@ -1,0 +1,18 @@
+version: '2'
+
+networks:
+  onlab:
+
+services:
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    command:
+      - '--config.file=/etc/prometheus/config/prometheus.yml'
+    volumes:
+      - ./prometheus/config/:/etc/prometheus/config/
+    ports:
+      - 9090:9090
+    networks:
+      - onlab
