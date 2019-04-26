@@ -1,17 +1,16 @@
-version: '2'
+version: "2"
 
 networks:
   onlab:
 
 services:
-
-###########
-# orderer #
-###########
+  ###########
+  # orderer #
+  ###########
 
   orderer.pbnetwork.com:
     container_name: orderer.pbnetwork.com
-    image: hyperledger/fabric-orderer
+    image: hyperledger/fabric-orderer:latest
     environment:
       - GOPATH=$HOME/go
       - FABRIC_LOGGING_SPEC=debug
@@ -30,22 +29,22 @@ services:
     ports:
       - 7050:7050
     volumes:
-        - ./channel-artifacts/:/etc/hyperledger/configtx
-        - ./crypto-config/ordererOrganizations/pbnetwork.com/orderers/orderer.pbnetwork.com/msp/:/etc/hyperledger/msp/orderer
-        - ./crypto-config/ordererOrganizations/pbnetwork.com/orderers/orderer.pbnetwork.com/tls:/etc/hyperledger/tls/orderer
-        - ./crypto-config/peerOrganizations/org1.pbnetwork.com/peers/peer0.org1.pbnetwork.com/tls/tlscacerts/:/etc/hyperledger/tls/rootcerts/peer0.org1
-        - ./crypto-config/peerOrganizations/org2.pbnetwork.com/peers/peer0.org2.pbnetwork.com/tls/tlscacerts/:/etc/hyperledger/tls/rootcerts/peer0.org2
-        - ./crypto-config/peerOrganizations/org3.pbnetwork.com/peers/peer0.org3.pbnetwork.com/tls/tlscacerts/:/etc/hyperledger/tls/rootcerts/peer0.org3
+      - ./channel-artifacts/:/etc/hyperledger/configtx
+      - ./crypto-config/ordererOrganizations/pbnetwork.com/orderers/orderer.pbnetwork.com/msp/:/etc/hyperledger/msp/orderer
+      - ./crypto-config/ordererOrganizations/pbnetwork.com/orderers/orderer.pbnetwork.com/tls:/etc/hyperledger/tls/orderer
+      - ./crypto-config/peerOrganizations/org1.pbnetwork.com/peers/peer0.org1.pbnetwork.com/tls/tlscacerts/:/etc/hyperledger/tls/rootcerts/peer0.org1
+      - ./crypto-config/peerOrganizations/org2.pbnetwork.com/peers/peer0.org2.pbnetwork.com/tls/tlscacerts/:/etc/hyperledger/tls/rootcerts/peer0.org2
+      - ./crypto-config/peerOrganizations/org3.pbnetwork.com/peers/peer0.org3.pbnetwork.com/tls/tlscacerts/:/etc/hyperledger/tls/rootcerts/peer0.org3
     networks:
       - onlab
 
-#########
-# peers #
-#########
+  #########
+  # peers #
+  #########
 
   peer0.org1.pbnetwork.com:
     container_name: peer0.org1.pbnetwork.com
-    image: hyperledger/fabric-peer
+    image: hyperledger/fabric-peer:1.4
     environment:
       - GOPATH=$HOME/go
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
@@ -95,7 +94,7 @@ services:
 
   peer0.org2.pbnetwork.com:
     container_name: peer0.org2.pbnetwork.com
-    image: hyperledger/fabric-peer
+    image: hyperledger/fabric-peer:1.4
     environment:
       - GOPATH=$HOME/go
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
@@ -145,7 +144,7 @@ services:
 
   peer0.org3.pbnetwork.com:
     container_name: peer0.org3.pbnetwork.com
-    image: hyperledger/fabric-peer
+    image: hyperledger/fabric-peer:1.4
     environment:
       - GOPATH=$HOME/go
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
@@ -193,9 +192,9 @@ services:
     networks:
       - onlab
 
-###########
-# CouchDB #
-###########
+  ###########
+  # CouchDB #
+  ###########
 
   couchdb.org1.pbnetwork.com:
     container_name: couchdb.org1.pbnetwork.com
@@ -236,13 +235,13 @@ services:
     networks:
       - onlab
 
-#######
-# cli #
-#######
+  #######
+  # cli #
+  #######
 
   cli:
     container_name: cli
-    image: hyperledger/fabric-tools
+    image: hyperledger/fabric-tools:1.4
     tty: true
     stdin_open: true
     environment:
