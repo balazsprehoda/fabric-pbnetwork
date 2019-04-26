@@ -1,6 +1,6 @@
 # fabric-pbnetwork
 
-This repository contains my project in **Project Laboratory** subject.
+This repository contains my project in **Project Laboratory** subject. Topic supervisor: [**Imre Kocsis**](https://www.mit.bme.hu/general/staff/ikocsis)
 
 It is a simple Hyperledger Fabric network implementation featuring:
 * 3 organizations with 1 peer each
@@ -10,6 +10,7 @@ It is a simple Hyperledger Fabric network implementation featuring:
 * TLS communication between CA servers and clients
 * TLS communication between peers and orderer
 * Identity Mixer enrollment for peers and users
+* Prometheus in Docker container for monitoring purposes
 
 ## Getting started
 
@@ -29,11 +30,11 @@ After cloning:
 
 Only members of Org1 and Org2 are allowed to read private data, but reading public data and writing onto the ledger is open for all of the organizations.
 
-* Create a pen instance: `create-pen peerIdentity penID model color length width lineWidth buyingPrice sellingPrice`
-* Query pen public data by ID: `query-public peerIdentity penID`
-* Query pen private data by ID: `query-private peerIdentity penID`
+* Create a pen instance: `create-pen <peerIdentity> <penID> <model> <color> <length> <width> <lineWidth> <buyingPrice> <sellingPrice>`
+* Query pen public data by ID: `query-public <peerIdentity> <penID>`
+* Query pen private data by ID: `query-private <peerIdentity> <penID>`
 
 `peerIdentity` is expected in the form of peerN.orgM
 `buyingPrice` and `sellingPrice` are considered to be sensitive, and also private data. After the creation of 5 more blocks, they get purged from the ledger.
 
-To get help with the use of the commands, type them without arguments.
+To get help with the use of commands, type them without arguments.
