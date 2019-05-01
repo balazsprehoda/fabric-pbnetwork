@@ -1,0 +1,6 @@
+#!/bin/bash
+
+COMPOSE_PROJECT_NAME=prometheus docker-compose -f docker-compose-prom-graf.yaml up
+
+docker network connect mychannel_onlab prometheus
+docker network connect mychannel_onlab grafana
